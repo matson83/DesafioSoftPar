@@ -1,41 +1,18 @@
-@extends('layouts.app')
+<x-app-layout>
+    <x-slot name="header">
+        <h2 class="text-xl font-semibold leading-tight text-gray-800">
+            {{ __('Admin Dashboard') }}
+        </h2>
+    </x-slot>
 
-@section('content')
-<h2>Criar Tarefa</h2>
-<form method="POST" action="{{ route('tasks.store') }}">
-    @csrf
-    <label for="title">Título:</label>
-    <input type="text" name="title" required>
+    <div class="py-12">
+        <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
+            <div class="overflow-hidden bg-white shadow-xl sm:rounded-lg">
+                <x-createtask :users="$users" />
 
-    <label for="status">Situação:</label>
-    <select name="status">
-        <option value="Concluída">Concluída</option>
-        <option value="Em andamento">Em andamento</option>
-        <option value="Espera">Espera</option>
-    </select>
+            </div>
+        </div>
+    </div>
+</x-app-layout>
 
-    <label for="description">Descrição:</label>
-    <textarea name="description" required></textarea>
 
-    <label for="classification">Classificação:</label>
-    <select name="classification">
-        <option value="Feat">Feat</option>
-        <option value="Bug">Bug</option>
-    </select>
-
-    <label for="estimated_hours">Horas Previstas:</label>
-    <input type="number" name="estimated_hours" required>
-
-    <label for="horas_gastas">Horas Gastas:</label>
-    <input type="number" name="horas_gastas">
-
-    <label for="user_id">Atribuir para o Usuário:</label>
-    <select name="user_id">
-        @foreach($users as $user)
-            <option value="{{ $user->id }}">{{ $user->name }}</option>
-        @endforeach
-    </select>
-
-    <button type="submit">Criar Tarefa</button>
-</form>
-@endsection

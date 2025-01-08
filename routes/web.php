@@ -3,6 +3,7 @@
 use App\Http\Controllers\AdminController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\TaskController;
+use App\Http\Controllers\InsightsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -31,6 +32,13 @@ Route::middleware([
 
 Route::middleware(['auth'])->group(function () {
     Route::resource('tasks', TaskController::class);
+    Route::get('/insights', [InsightsController::class, 'index'])->name('insights.index');
 });
 
 Route::get('/home', [AdminController::class, 'index'])->name('home');
+
+// Routes
+Route::middleware(['auth'])->group(function () {
+    Route::get('/tasks/{task}/edit', [TaskController::class, 'edit'])->name('tasks.edit');
+    Route::patch('/tasks/{task}', [TaskController::class, 'update'])->name('tasks.update');
+});

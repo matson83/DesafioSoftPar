@@ -1,39 +1,20 @@
-@extends('layouts.app')
 
-@section('content')
-    <h2>Lista de Tarefas</h2>
+<x-app-layout>
+    <x-slot name="header">
+        <h2 class="text-xl font-semibold leading-tight text-gray-800">
+            {{ __('Dashboard') }}
+        </h2>
+    </x-slot>
 
-    <table>
-        <thead>
-            <tr>
-                <th>Título</th>
-                <th>Status</th>
-                <th>Descrição</th>
-                <th>Classificação</th>
-                <th>Horas Previstas</th>
-                <th>Horas Gastas</th>
-                <th>Ações</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach($tasks as $task)
-                <tr>
-                    <td>{{ $task->title }}</td>
-                    <td>{{ $task->status }}</td>
-                    <td>{{ $task->description }}</td>
-                    <td>{{ $task->classification }}</td>
-                    <td>{{ $task->estimated_hours }}</td>
-                    <td>{{ $task->horas_gastas }}</td>
-                    <td>
-                        <a href="{{ route('tasks.edit', $task->id) }}">Editar</a> |
-                        <form action="{{ route('tasks.destroy', $task->id) }}" method="POST" style="display:inline;">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit">Excluir</button>
-                        </form>
-                    </td>
-                </tr>
-            @endforeach
-        </tbody>
-    </table>
-@endsection
+    <div class="py-12">
+        <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
+            <div class="overflow-hidden bg-white shadow-xl sm:rounded-lg">
+                <x-welcome :tasks="$tasks" />
+
+            </div>
+        </div>
+    </div>
+</x-app-layout>
+
+
+

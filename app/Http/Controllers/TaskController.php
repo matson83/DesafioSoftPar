@@ -18,13 +18,13 @@ class TaskController extends Controller
     public function create()
     {
         if (Auth::user()->usertype != 'admin') {
-            // Se não for admin, redireciona para a página principal (dashboard)
-            return redirect()->route('dashboard');
+            return redirect()->route('tasks.index')->with('error', 'Você não tem permissão para criar tarefas.');
         }
 
         $users = User::where('usertype', 'user')->get();
         return view('tasks.create', compact('users'));
     }
+
 
 
     public function store(Request $request)
@@ -55,25 +55,40 @@ class TaskController extends Controller
 
     public function edit(Task $task)
     {
-        $this->authorize('update', $task);
-        return view('tasks.edit', compact('task'));
+        $task->load('user');
+        $users = User::all();
+        return view('tasks.edit', compact('task', 'users'));
     }
 
     public function update(Request $request, Task $task)
     {
-        $this->authorize('update', $task);
-
-        $request->validate([
-            'status' => 'required',
-            'description' => 'required',
-            'classification' => 'required',
+        // Validação comum para todos os usuários
+        $validated = $request->validate([
+            'status' => 'required|string',
+            'description' => 'required|string',
             'horas_gastas' => 'nullable|integer',
         ]);
 
-        $task->update($request->only(['status', 'description', 'classification', 'horas_gastas']));
+        // Verificando se o usuário é admin para permitir edição de mais campos
+        if (Auth::user()->usertype == 'admin') {
+            // Adicionando as validações para campos que o admin pode editar
+            $request->validate([
+                'title' => 'required|string|max:255',
+                'user_id' => 'required|exists:users,id',
+                'estimated_hours' => 'nullable|integer',
+            ]);
 
-        return redirect()->route('tasks.index');
+            // Atualizando o task com todos os campos
+            $task->update($request->only(['title', 'user_id', 'estimated_hours', 'status', 'description', 'classification', 'horas_gastas']));
+        } else {
+            // Atualizando apenas os campos que o usuário pode editar
+            $task->update($request->only(['status', 'description', 'horas_gastas']));
+        }
+
+        // Redirecionando de volta para a lista de tarefas
+        return redirect()->route('tasks.index')->with('success', 'Tarefa atualizada com sucesso!');
     }
+
 
     public function destroy(Task $task)
     {

@@ -1,30 +1,17 @@
-@extends('layouts.app')
+<x-app-layout>
+    <x-slot name="header">
+        <h2 class="text-xl font-semibold leading-tight text-gray-800">
+            {{ __('Dashboard') }}
+        </h2>
+    </x-slot>
 
-@section('content')
-<h2>Editar Tarefa</h2>
-<form method="POST" action="{{ route('tasks.update', $task->id) }}">
-    @csrf
-    @method('PUT')
+    <div class="py-12">
+        <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
+            <div class="overflow-hidden bg-white shadow-xl sm:rounded-lg">
+                <x-edittask :users="$users" :task="$task" />
 
-    <label for="status">Situação:</label>
-    <select name="status">
-        <option value="Concluída" {{ $task->status == 'Concluída' ? 'selected' : '' }}>Concluída</option>
-        <option value="Em andamento" {{ $task->status == 'Em andamento' ? 'selected' : '' }}>Em andamento</option>
-        <option value="Espera" {{ $task->status == 'Espera' ? 'selected' : '' }}>Espera</option>
-    </select>
 
-    <label for="description">Descrição:</label>
-    <textarea name="description">{{ $task->description }}</textarea>
-
-    <label for="classification">Classificação:</label>
-    <select name="classification">
-        <option value="Feat" {{ $task->classification == 'Feat' ? 'selected' : '' }}>Feat</option>
-        <option value="Bug" {{ $task->classification == 'Bug' ? 'selected' : '' }}>Bug</option>
-    </select>
-
-    <label for="horas_gastas">Horas Gastas:</label>
-    <input type="number" name="horas_gastas" value="{{ $task->horas_gastas }}">
-
-    <button type="submit">Atualizar Tarefa</button>
-</form>
-@endsection
+            </div>
+        </div>
+    </div>
+</x-app-layout>

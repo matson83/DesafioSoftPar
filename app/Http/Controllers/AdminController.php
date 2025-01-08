@@ -12,10 +12,11 @@ class AdminController extends Controller
     {
         if (Auth::id()) {
             $usertype = Auth::user()->usertype;
+            $tasks = \App\Models\Task::all();
             if ($usertype == 'user') {
-                return view('dashboard');
+                return view('tasks.index', compact('tasks'));
             } elseif ($usertype == 'admin') {
-                return view('admin.index');
+                return view('admin.index', compact('tasks'));
             } else {
                 return redirect()->back();
             }
