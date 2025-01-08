@@ -37,6 +37,9 @@ Este é um sistema web de gerenciamento de tarefas desenvolvido com o framework 
 - Configure o arquivo .env
 - Execute as migrations para criar o banco de dados
 - Popule o banco de dados com dados de exemplo (php artisan db:seed)
+- Login :
+  - Para usuário : user@example.com / 12345678
+  - Para admin : admin@example.com / 12345678
 
 ## Funcionalidades do Sistema
 
